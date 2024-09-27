@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet, Image } from "react-native";
 import { createClient } from "@supabase/supabase-js";
-
+import { useQuery } from "@tanstack/react-query";
 // Create a single Supabase client for interacting with your database
 const supabase = createClient(
   "https://dqkucpsuytkkmhqenqmd.supabase.co",
@@ -14,35 +14,36 @@ function PokemonDetailScreen({ route }: { route: any }) {
   const [pokemonData, setPokemonData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch Pokémon data
-        const response = await fetch(url);
-        const data = await response.json();
-        setPokemonData(data);
+  const { data, error } = useQuery({
+    queryKey: ["pokemon", url],
+    queryFn: async () => {
+      const response = await fetch(url);
+      const data = await response.json();
+      // Insert Pokémon name into Supabase
+      const { error } = await supabase.from("pokemon").upsert({
+        pokemon_name: data.name,
+        ability1: data.abilities[0]?.ability.name,
+        ability2: data.abilities[1]?.ability.name,
+      });
 
-        // Insert Pokémon name into Supabase
-        const { error } = await supabase
-          .from("pokemon") // Replace with your table name
-          .upsert({
-            pokemon_name: data.name,
-            ability1: data.abilities[0]?.ability.name,
-            ability2: data.abilities[1]?.ability.name,
-          }); // Adjust the key if your column name is different
-
-        if (error) {
-          console.error("Error inserting data:", error);
-        }
-      } catch (error) {
-        console.error("Error fetching Pokémon data:", error);
-      } finally {
-        setLoading(false);
+      if (error) {
+        console.error("Error inserting data:", error);
       }
-    };
 
-    fetchData();
-  }, [url]);
+      return data;
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      setPokemonData(data);
+      setLoading(false);
+    }
+    if (error) {
+      console.error("Error fetching Pokémon data:", error);
+      setLoading(false);
+    }
+  }, [data, error]);
 
   return (
     <View style={styles.container}>

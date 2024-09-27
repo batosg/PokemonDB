@@ -23,6 +23,9 @@ dependencies:
   '@supabase/supabase-js':
     specifier: ^2.45.4
     version: 2.45.4
+  '@tanstack/react-query':
+    specifier: ^5.56.2
+    version: 5.56.2(react@18.2.0)
   expo:
     specifier: ~51.0.28
     version: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
@@ -1605,7 +1608,7 @@ packages:
 
   /@expo/bunyan@4.0.1:
     resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
-    engines: {node: '>=0.10.0'}
+    engines: {'0': node >=0.10.0}
     dependencies:
       uuid: 8.3.2
     dev: false
@@ -3035,6 +3038,19 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    dev: false
+
+  /@tanstack/query-core@5.56.2:
+    resolution: {integrity: sha512-gor0RI3/R5rVV3gXfddh1MM+hgl0Z4G7tj6Xxpq6p2I03NGPaJ8dITY9Gz05zYYb/EJq9vPas/T4wn9EaDPd4Q==}
+    dev: false
+
+  /@tanstack/react-query@5.56.2(react@18.2.0):
+    resolution: {integrity: sha512-SR0GzHVo6yzhN72pnRhkEFRAHMsUo5ZPzAxfTMvUxFIDVS6W9LYUp6nXW3fcHVdg0ZJl8opSH85jqahvm6DSVg==}
+    peerDependencies:
+      react: ^18 || ^19
+    dependencies:
+      '@tanstack/query-core': 5.56.2
+      react: 18.2.0
     dev: false
 
   /@tootallnate/once@2.0.0:
